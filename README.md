@@ -11,6 +11,8 @@ https://github.com/wangjiegulu/WheelView
 
 2，滑动将要停止的时候很大概率会发生回转，感觉有点难受。
 
+3，回调的index是加上offset后的值，使用不太方便。
+
 所以就在wangjiegulu大神的基础上做了一番改造。
 
 如图，图1是原版效果，图2是我改造后的效果。
