@@ -23,6 +23,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * WheelView
+ * @author Vinnie
+ */
 public class WheelView extends ScrollView {
 
     public static final String TAG = WheelView.class.getSimpleName();
