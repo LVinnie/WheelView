@@ -4,11 +4,15 @@ WheelView
 ## explain
 之前使用了wangjiegulu大神造的WheelView
 https://github.com/wangjiegulu/WheelView
+
 觉得有两点缺陷。
+
 1，滑动速度很快的时候，要很长时间才会停下来，用户要等待很久。
+
 2，将要停止的时候很多时候会发生回转，感觉有点难受。
 
 所以就在wangjiegulu大神的基础上做了一番改造。
+
 如图，图1是我改造后，图2是之前。
 
 <img src='image/1.gif' height='500px'/>
