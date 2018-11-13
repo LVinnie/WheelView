@@ -6,16 +6,9 @@
     >
 
     <com.vinnie.weight.WheelView
-        android:id="@+id/main_wv"
+        android:id="@+id/view_wv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
-
-    <Button
-        android:id="@+id/main_show_dialog_btn"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="show WheelView in Dialog!"
         />
 
 </LinearLayout>
