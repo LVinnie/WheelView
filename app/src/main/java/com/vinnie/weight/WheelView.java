@@ -99,9 +99,9 @@ public class WheelView extends ScrollView {
         this.context = context;
 
         float displayMetrics = context.getResources().getDisplayMetrics().density;
-        fastSpeed = (int) (displayMetrics * 15);
+        fastSpeed = (int) (displayMetrics * 16);
         centerSpeed = (int) (displayMetrics * 8);
-        slowSpeed = (int) (displayMetrics * 2);
+        slowSpeed = (int) (displayMetrics * 4);
 
         this.setVerticalScrollBarEnabled(false);
         this.setOverScrollMode(View.OVER_SCROLL_NEVER);
@@ -136,15 +136,15 @@ public class WheelView extends ScrollView {
                                         }
                                     } else if (speedY < centerSpeed) {
                                         if (remainder > itemHeight / 2) {
-                                            selectedIndex = divided + offset + 3;
-                                        } else {
                                             selectedIndex = divided + offset + 2;
+                                        } else {
+                                            selectedIndex = divided + offset + 1;
                                         }
                                     } else {
                                         if (remainder > itemHeight / 2) {
-                                            selectedIndex = divided + offset + 5;
+                                            selectedIndex = divided + offset + 3;
                                         } else {
-                                            selectedIndex = divided + offset + 4;
+                                            selectedIndex = divided + offset + 2;
                                         }
                                     }
 
@@ -164,15 +164,15 @@ public class WheelView extends ScrollView {
                                         }
                                     } else if (speedY < centerSpeed) {
                                         if (remainder > itemHeight / 2) {
-                                            selectedIndex = divided + offset - 1;
+                                            selectedIndex = divided + offset - 0;
                                         } else {
-                                            selectedIndex = divided + offset - 2;
+                                            selectedIndex = divided + offset - 1;
                                         }
                                     } else {
                                         if (remainder > itemHeight / 2) {
-                                            selectedIndex = divided + offset - 3;
+                                            selectedIndex = divided + offset - 2;
                                         } else {
-                                            selectedIndex = divided + offset - 4;
+                                            selectedIndex = divided + offset - 3;
                                         }
                                     }
                                     WheelView.this.smoothScrollTo(0, itemHeight * (selectedIndex - offset));
