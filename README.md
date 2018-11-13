@@ -15,7 +15,7 @@ https://github.com/wangjiegulu/WheelView
 
 所以就在wangjiegulu大神的基础上做了一番改造。
 
-如图，图1是原版效果，图2是我改造后的效果。
+如图，图1是原版效果，图2是我改造后的效果。（GIF效果差，真实效果好很多）
 
 <img src='image/2.gif' height='500px'/>
 <img src='image/1.gif' height='500px'/>
