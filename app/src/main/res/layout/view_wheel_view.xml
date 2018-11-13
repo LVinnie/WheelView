@@ -6,7 +6,7 @@
     >
 
     <com.vinnie.weight.WheelView
-        android:id="@+id/view_wv"
+        android:id="@+id/wheel_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        WheelView wv = findViewById(R.id.main_wv);
+        WheelView wv = findViewById(R.id.wheel_view);
 
         wv.setOffset(1);
         wv.setItems(Arrays.asList(PLANETS));
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.main_show_dialog_btn:
                 View outerView = LayoutInflater.from(this).inflate(R.layout.view_wheel_view, null);
-                WheelView wv = outerView.findViewById(R.id.view_wv);
+                WheelView wv = outerView.findViewById(R.id.wheel_view);
                 wv.setOffset(2);
                 wv.setItems(Arrays.asList(PLANETS));
                 wv.setSelection(3);
