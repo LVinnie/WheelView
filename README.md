@@ -13,10 +13,10 @@ https://github.com/wangjiegulu/WheelView
 
 所以就在wangjiegulu大神的基础上做了一番改造。
 
-如图，图1是我改造后，图2是之前。
+如图，图1是原版效果，图2是我改造后的效果。
 
-<img src='image/1.gif' height='500px'/>
 <img src='image/2.gif' height='500px'/>
+<img src='image/1.gif' height='500px'/>
 
 ## How to use
 
