@@ -18,4 +18,18 @@
         android:text="show WheelView in Dialog!"
         />
 
+    <Button
+        android:id="@+id/main_show_popup_btn"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="show WheelView in Popup!"
+        />
+
+    <Button
+        android:id="@+id/main_reset_popup_btn"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="reset WheelView in Popup!"
+        />
+
 </LinearLayout>

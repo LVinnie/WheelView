@@ -1,6 +1,7 @@
 package com.vinnie.weight.activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +10,16 @@ import android.view.View;
 
 import com.vinnie.weight.R;
 import com.vinnie.weight.WheelView;
+import com.vinnie.weight.popup.WheelViewPopupWindow;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String[] PLANETS = new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50"};
+    private static final String[] PLANETS = new String[]{"S00", "S01", "S02", "S03", "S04", "S05", "S06", "S07", "S08", "S09", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S19", "S20", "S21", "S22", "S23", "S24", "S25", "S26", "S27", "S28", "S29", "S30", "S31", "S32", "S33", "S34", "S35", "S36", "S37", "S38", "S39", "S40", "S41", "S42", "S43", "S44", "S45", "S46", "S47", "S48", "S49", "S50"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +38,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         findViewById(R.id.main_show_dialog_btn).setOnClickListener(this);
+        findViewById(R.id.main_show_popup_btn).setOnClickListener(this);
+        findViewById(R.id.main_reset_popup_btn).setOnClickListener(this);
     }
 
+    AlertDialog alertDialog;
+    WheelViewPopupWindow wheelViewPopupWindow;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.main_show_dialog_btn:
-                View outerView = LayoutInflater.from(this).inflate(R.layout.view_wheel_view, null);
+                if (alertDialog == null) {
+                    View outerView = LayoutInflater.from(this).inflate(R.layout.view_wheel_view, null);
+                    final WheelView wv = outerView.findViewById(R.id.wheel_view);
+                    wv.setOffset(2);
+                    wv.setItems(Arrays.asList(PLANETS));
+                    wv.setSelection(3);
+                    wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
+                        @Override
+                        public void onSelected(int selectedIndex, String item) {
+                            Log.e(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
+                        }
+                    });
+
+                    alertDialog = new AlertDialog.Builder(this)
+                            .setTitle("WheelView in Dialog")
+                            .setView(outerView)
+                            .setPositiveButton("OK", null)
+                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    //dialog dismiss时需要手动调用stop，否则取到的值是最后一次停止时的值。
+                                    wv.stop();
+                                    Log.e(TAG, "[Dialog#dismiss]selectedIndex: " + wv.getSelectedIndex() + ", item: " + wv.getSelectedItem());
+                                }
+                            }).create();
+                }
+                alertDialog.show();
+
+                /*View outerView = LayoutInflater.from(this).inflate(R.layout.view_wheel_view, null);
                 WheelView wv = outerView.findViewById(R.id.wheel_view);
                 wv.setOffset(2);
                 wv.setItems(Arrays.asList(PLANETS));
@@ -56,8 +92,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setTitle("WheelView in Dialog")
                         .setView(outerView)
                         .setPositiveButton("OK", null)
-                        .show();
-
+                        .show();*/
+                break;
+            case R.id.main_show_popup_btn:
+                if (wheelViewPopupWindow == null) {
+                    List<String> list = Arrays.asList(PLANETS);
+                    List<List<String>> data = new ArrayList<>();
+                    data.add(list);
+                    data.add(list);
+                    data.add(list);
+                    wheelViewPopupWindow = new WheelViewPopupWindow(MainActivity.this)
+                            .setOffset(3)
+                            .setData(data)
+                            .setDefaultSelection(5, 6, 7)
+                            .setOnSelectListener(new WheelViewPopupWindow.OnSelectListener() {
+                                @Override
+                                public void onSelect(List<String> list) {
+                                    StringBuilder sb = new StringBuilder();
+                                    for (String s : list) {
+                                        sb.append(s);
+                                        sb.append(",");
+                                    }
+                                    sb.deleteCharAt(sb.length() - 1);
+                                    Log.e(TAG, "[PopupWindow] selected: " + sb.toString());
+                                }
+                            });
+                }
+                wheelViewPopupWindow.showAtCenter();
+                break;
+            case R.id.main_reset_popup_btn:
+                if (wheelViewPopupWindow != null) {
+                    wheelViewPopupWindow.resetSelection();
+                }
                 break;
         }
     }
