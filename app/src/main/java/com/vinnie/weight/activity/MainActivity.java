@@ -101,10 +101,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     data.add(list);
                     data.add(list);
                     data.add(list);
+                    data.add(list);
                     wheelViewPopupWindow = new WheelViewPopupWindow(MainActivity.this)
                             .setOffset(3)
                             .setData(data)
-                            .setDefaultSelection(5, 6, 7)
+                            .setDefaultSelection(5, 6, 7, 8)
                             .setOnSelectListener(new WheelViewPopupWindow.OnSelectListener() {
                                 @Override
                                 public void onSelect(List<String> list) {
