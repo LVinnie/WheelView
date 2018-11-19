@@ -64,6 +64,32 @@ new AlertDialog.Builder(this)
         .setPositiveButton("OK", null)
         .show();
 ```
+
+#### WheelViewPopupWindow:
+```java
+List<String> list = Arrays.asList(PLANETS);
+List<List<String>> data = new ArrayList<>();
+data.add(list);
+data.add(list);
+data.add(list);
+WheelViewPopupWindow wheelViewPopupWindow = new WheelViewPopupWindow(MainActivity.this)
+        .setOffset(3)
+        .setData(data)
+        .setDefaultSelection(5, 6, 7, 8)
+        .setOnSelectListener(new WheelViewPopupWindow.OnSelectListener() {
+            @Override
+            public void onSelect(List<String> list) {
+                StringBuilder sb = new StringBuilder();
+                for (String s : list) {
+                    sb.append(s);
+                    sb.append(",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+                Log.e(TAG, "[PopupWindow] selected: " + sb.toString());
+            }
+        });
+wheelViewPopupWindow.showAtCenter();
+```
     
 License
 =======
