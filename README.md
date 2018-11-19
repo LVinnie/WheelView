@@ -13,6 +13,8 @@ https://github.com/wangjiegulu/WheelView
 
 3，回调的index是加上offset后的值，使用不太方便。
 
+4，新增了手动stop功能，适用于Dialog或PopupWindow。
+
 所以就在wangjiegulu大神的基础上做了一番改造。
 
 如图，图1是原版效果，图2是我改造后的效果。（录的24帧的GIF，效果差，真实效果好很多）
@@ -46,15 +48,15 @@ wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
 
 #### Show in dialog:
 ```java
-View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);
-WheelView wv = (WheelView) outerView.findViewById(R.id.wheel_view_wv);
+View outerView = LayoutInflater.from(this).inflate(R.layout.view_wheel_view, null);
+final WheelView wv = outerView.findViewById(R.id.wheel_view);
 wv.setOffset(2);
 wv.setItems(Arrays.asList(PLANETS));
 wv.setSelection(3);
 wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {
     @Override
     public void onSelected(int selectedIndex, String item) {
-        Log.d(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
+        Log.e(TAG, "[Dialog]selectedIndex: " + selectedIndex + ", item: " + item);
     }
 });
 
@@ -62,7 +64,14 @@ new AlertDialog.Builder(this)
         .setTitle("WheelView in Dialog")
         .setView(outerView)
         .setPositiveButton("OK", null)
-        .show();
+        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                //dialog dismiss时需要手动调用stop，否则取到的值是最后一次停止时的值。
+                wv.stop();
+                Log.e(TAG, "[Dialog#dismiss]selectedIndex: " + wv.getSelectedIndex() + ", item: " + wv.getSelectedItem());
+            }
+        }).show();
 ```
 
 #### WheelViewPopupWindow:
