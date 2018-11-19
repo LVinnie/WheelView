@@ -111,8 +111,10 @@ public class WheelView extends ScrollView {
         this.addView(views);
 
         scrollerTask = new Runnable() {
-
             public void run() {
+                if (stopped) {
+                    return;
+                }
 
                 int newY = getScrollY();
                 boolean stopped = (initialY - newY) == 0;
@@ -123,11 +125,11 @@ public class WheelView extends ScrollView {
                         selectedIndex = divided + offset;
                         onSelectedCallBack();
                     } else {
+                        stopped = true;
                         if (scrollDirection == SCROLL_DIRECTION_DOWN) {
                             WheelView.this.post(new Runnable() {
                                 @Override
                                 public void run() {
-
                                     if (speedY < slowSpeed) {
                                         if (remainder > itemHeight / 2) {
                                             selectedIndex = divided + offset + 1;
@@ -170,9 +172,9 @@ public class WheelView extends ScrollView {
                                         }
                                     } else {
                                         if (remainder > itemHeight / 2) {
-                                            selectedIndex = divided + offset - 2;
+                                            selectedIndex = divided + offset - 1;
                                         } else {
-                                            selectedIndex = divided + offset - 3;
+                                            selectedIndex = divided + offset - 2;
                                         }
                                     }
                                     WheelView.this.smoothScrollTo(0, itemHeight * (selectedIndex - offset));
@@ -189,6 +191,32 @@ public class WheelView extends ScrollView {
         };
     }
 
+    boolean stopped = true;
+
+    /**
+     * 手动停止滑动
+     */
+    public void stop() {
+        if (stopped) {
+            return;
+        }
+        stopped = true;
+        initialY = getScrollY();
+        int divided = initialY / itemHeight;
+        int remainder = initialY % itemHeight;
+
+        if (remainder > itemHeight / 2) {
+            selectedIndex = divided + offset + 1;
+        } else {
+            selectedIndex = divided + offset;
+        }
+
+        trimSelectedIndex();
+
+        WheelView.this.scrollTo(0, itemHeight * (selectedIndex - offset));
+        WheelView.this.smoothScrollTo(0, itemHeight * (selectedIndex - offset));
+    }
+
     int initialY;
 
     Runnable scrollerTask;
@@ -196,6 +224,7 @@ public class WheelView extends ScrollView {
 
     public void startScrollerTask() {
         initialY = getScrollY();
+        stopped = false;
         this.postDelayed(scrollerTask, newCheck);
     }
 
@@ -206,11 +235,13 @@ public class WheelView extends ScrollView {
             views.addView(createView(item));
         }
 
+        // 初始选中条目为第一位
         refreshItemView(0);
     }
 
     int itemHeight = 0;
 
+    // 回显输入框字体样式
     private TextView createView(String item) {
         if (itemHeight == 0) {
             itemHeight = dip2px(60);
@@ -242,6 +273,10 @@ public class WheelView extends ScrollView {
         }
     }
 
+    /**
+     * 设置选中条目
+     * @param y
+     */
     private void refreshItemView(int y) {
         int position = y / itemHeight + offset;
         int remainder = y % itemHeight;
@@ -261,6 +296,7 @@ public class WheelView extends ScrollView {
             if (null == itemView) {
                 return;
             }
+            // 设置wheelView item字体与颜色
             if (position == i) {
                 itemView.setTextColor(Color.parseColor("#2BB054"));
                 itemView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 33);
@@ -330,7 +366,6 @@ public class WheelView extends ScrollView {
             }
         };
 
-
         super.setBackgroundDrawable(background);
 
     }
@@ -346,13 +381,7 @@ public class WheelView extends ScrollView {
      * 选中回调
      */
     private void onSelectedCallBack() {
-
-        if (selectedIndex < offset) {
-            selectedIndex = offset;
-        } else if (selectedIndex > items.size() - offset - 1) {
-            selectedIndex = items.size() - offset - 1;
-        }
-
+        trimSelectedIndex();
         if (null != onWheelViewListener) {
             onWheelViewListener.onSelected(selectedIndex - offset, items.get(selectedIndex));
         }
@@ -364,17 +393,32 @@ public class WheelView extends ScrollView {
         this.post(new Runnable() {
             @Override
             public void run() {
+                WheelView.this.scrollTo(0, p * itemHeight);
                 WheelView.this.smoothScrollTo(0, p * itemHeight);
             }
         });
-
     }
 
+    private void trimSelectedIndex() {
+        if (selectedIndex < offset) {
+            selectedIndex = offset;
+        } else if (selectedIndex > items.size() - offset - 1) {
+            selectedIndex = items.size() - offset - 1;
+        }
+    }
+
+    /**
+     * 注意：如果在滑动中想要获取值，需要手动调用{@link #stop}方法；否则会获得上一次停止时的值。
+     *
+     * @return 选中的值
+     */
     public String getSelectedItem() {
+        trimSelectedIndex();
         return items.get(selectedIndex);
     }
 
     public int getSelectedIndex() {
+        trimSelectedIndex();
         return selectedIndex - offset;
     }
 
@@ -386,7 +430,6 @@ public class WheelView extends ScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
-
             startScrollerTask();
         }
         return super.onTouchEvent(ev);
